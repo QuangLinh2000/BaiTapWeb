@@ -1,0 +1,158 @@
+﻿
+@model List<BaiTapWeb.Models.Category>
+
+@{
+    ViewData["Title"] = "CreateProduct";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="content-main">
+<div class="content-header">
+     <h2 class="content-title">Create Product</h2>
+</div>
+
+<div class="card">
+     <div class="card-body">
+          <div class="row">
+               <div class="col-md-12">
+                    <div>
+                         <div class="mb-4">
+                              <label for="product_name" class="form-label">Code</label>
+                              <div class="row">
+                                  <div class ="col-md-10">
+                                        <input required type="text" placeholder="Enter here...." class="form-control " id="product_code" />
+
+                                  </div>
+                                    <div class ="col-md-2">
+                                      <a id = "Create-code" class="btn btn-primary">Create code</a>
+
+                                  </div>
+
+                              </div>
+
+                          </div>
+                         <div class="mb-4">
+                              <label for="product_slug" class="form-label">Name</label>
+                              <input required type="text" placeholder="Enter here...." class="form-control" id="product_name" />
+                         </div>
+                         <div class="mb-4">
+                              <label for="product_slug" class="form-label">Price</label>
+                              <input required type="number" placeholder="Enter here...." class="form-control" id="product_price" />
+                         </div>
+                         <div class="mb-4">
+                              <label class="form-label">Category</label>
+                              <select class="form-select" id = "product-category">
+                                @foreach (var item in Model)
+                                {
+                                    <option value = "@item.Id">@item.Name</option>
+                                }
+                                
+                              </select>
+                         </div>
+                         <div class="mb-4">
+                              <label class="form-label">Discription</label>
+                              <textarea id = "description-product" placeholder="Enter here...." class="form-control" rows="4"></textarea>
+                         </div>
+                         <div class="d-grid">
+                              <button id = "btn-create-product" class="btn btn-primary">Create</button>
+                         </div>
+                    </div>
+               </div>
+              
+          </div> <!-- .row // -->
+     </div> <!-- card body .// -->
+</div> <!-- card .// -->
+</section> <!-- content-main end// -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="Modle-noty-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Modle-noty-createTitle">Modal title</h5>
+        <button type="button" class="close dismiss-model" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id = "content-noty">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id = "btn-Close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+     @*---------------create code  @System.Guid.NewGuid()-----------*@
+
+      var check = false;
+    document.querySelector('.dismiss-model').addEventListener('click', function(e) {
+               $('#Modle-noty-create').modal('hide');
+
+    });
+     document.querySelector('#btn-Close').addEventListener('click', function(e) {
+         if(check){
+         window.location.href = "";
+
+         }else{
+            $('#Modle-noty-create').modal('hide');
+
+         }
+
+    });
+
+
+    document.querySelector('#Create-code').addEventListener('click', function(e) {
+         $('#product_code').val(uuidv4());
+
+    });
+
+    document.querySelector('#btn-create-product').addEventListener('click', function(e) {
+          var code = $('#product_code').val();
+          var name = $('#product_name').val();
+          var price = $('#product_price').val();
+          var  description = $('#description-product').val();
+         var category = document.querySelector("#product-category").value;
+        $('#Modle-noty-createTitle').text('Add Product')
+
+     
+
+        if(code.trim().length  ==0  || name.trim().length ==0 || price.trim().length ==0 ){
+             $('#content-noty').html('Please complete all information')
+              $('#Modle-noty-create').modal('show');
+            return;
+        }
+
+
+         $.ajax({
+        url: 'addProduct',
+        type: 'POST',
+        data : {
+            code: code,
+            name: name,
+            price: price,
+            discription:description,
+            category:category
+        },
+        success: function(data){
+          if(data){
+              $('#content-noty').html('Add Product success')
+              $('#Modle-noty-create').modal('show');
+              check = true;
+          }else{
+               $('#content-noty').html('Add Product fail, code already exists')
+
+              $('#Modle-noty-create').modal('show')
+          }
+           
+        }
+    });
+
+    });
+
+
+
+</script>

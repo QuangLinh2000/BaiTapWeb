@@ -1,0 +1,132 @@
+﻿
+
+ <!DOCTYPE HTML>
+<html lang="en">
+
+<!-- Mirrored from www.ecommerce-admin.com/demo/page-products-table.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Dec 2021 02:38:57 GMT -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>@ViewData["Title"]</title>
+
+   
+  <link href="~/images/favicon.ico" rel="shortcut icon" type="image/x-icon">
+
+  <link href="~/css/bootstrapf9e3.css?v=1.1" rel="stylesheet" type="text/css"/>
+
+  <!-- custom style -->
+  <link href="~/css/uif9e3.css?v=1.1" rel="stylesheet" type="text/css"/>
+  <link href="~/css/responsivef9e3.css?v=1.1" rel="stylesheet" />
+
+  <!-- iconfont -->
+  <link rel="stylesheet" href="~/fonts/material-icon/css/round.css"/>
+  
+  
+
+</head>
+<body>
+
+<b class="screen-overlay"></b>
+
+<aside class="navbar-aside" id="offcanvas_aside">
+    <div class="aside-top">
+      <a href="/Product" class="brand-wrap">
+        <img src="~/images/logo.svg" height="46" class="logo" alt="Ecommerce dashboard template">
+      </a>
+      <div>
+        <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
+      </div>
+    </div> <!-- aside-top.// -->
+
+    <nav>
+      <ul class="menu-aside">
+      
+        <li class="menu-item">
+          <a class="menu-link" asp-area="" asp-controller="Product" asp-action="Index" > <i class="icon material-icons md-shopping_bag"></i>
+            <span class="text">Product</span>
+          </a>
+         
+        </li>
+        <li class="menu-item ">
+          <a class="menu-link" asp-area="" asp-controller="Order" asp-action="Index"> <i class="icon material-icons md-shopping_cart"></i>
+            <span class="text">Order</span>
+          </a>
+        
+        </li>
+        <li class="menu-item ">
+          <a class="menu-link" asp-area="" asp-controller="Customer" asp-action="Index"> <i class="icon material-icons md-store"></i>
+            <span class="text">Customer</span>
+          </a>
+         
+        <li class="menu-item">
+          <a class="menu-link"  asp-area="" asp-controller="Category" asp-action="Index"> <i class="icon material-icons md-pie_chart"></i>
+            <span class="text">Category</span>
+          </a>
+        </li>
+      </ul>
+      
+    </nav>
+    </aside>
+
+<main class="main-wrap">
+    <header class="main-header navbar">
+        <div class="col-search">
+           
+        </div>
+        <div class="col-nav">
+           <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="md-28 material-icons md-menu"></i> </button>
+           <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link btn-icon" onclick="darkmode(this)" title="Dark mode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
+            </li>
+            <li class="nav-item">
+            </li>
+            <li class="dropdown nav-item">
+            
+            </li>
+          </ul>
+        </div>
+    </header>
+
+    @RenderBody();
+</main>
+
+<script>
+    if(localStorage.getItem("darkmode")){
+        var body_el = document.body;
+        body_el.className += 'dark';
+    }
+</script>
+
+<script src="~/js/jquery-3.5.0.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+
+<!-- Custom JS -->
+<script src="~/js/scriptc619.js?v=1.0"></script>
+   @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+<!-- Mirrored from www.ecommerce-admin.com/demo/page-products-table.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 07 Dec 2021 02:38:57 GMT -->
+</html>
+<script>
+    var title =  document.title;
+       document.querySelectorAll('.menu-item').forEach(function(item){
+        //get text item
+        var text = item.querySelector('.text').innerHTML;
+        if(title == text){
+            item.classList.add('active');
+        }
+
+    })
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+          var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      }
+</script>
+   
+

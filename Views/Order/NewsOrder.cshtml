@@ -1,0 +1,189 @@
+﻿@model List<BaiTapWeb.Models.VProduct>
+
+@{
+    ViewData["Title"] = "NewsOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var idCustomer = ViewBag.idCustomer;
+
+}
+<section class="content-main">
+
+        <div class="content-header">
+            <h2 class="content-title">Product selection </h2>
+            <div>
+                <a href="#" id = "btn-save" class="btn btn-primary"><i class="material-icons md-plus"></i>Save</a>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            
+            <div class="card-body">
+                <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                </div>
+                            </th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Description</th>
+
+                            <th class="text-end"> Quantity </th>
+                        </tr>
+                    </thead>
+                    <tbody id = "body-product">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input price = "@item.Price" description ="@item.Description" idProduct = "@item.Id" class="form-check-input" type="checkbox">
+                                </div>
+                            </td>
+                            <td>@item.Code</td>
+                            <td><b>@item.Name</b></td>
+                            <td>@String.Format("{0:0,0 đ}", item.Price)</td>
+                            <td>@item.NameCategory</td>
+                            <td>@item.Description</td>
+                            <td class="text-end"> <input  disabled  class="btn btn-light quantity" value = "0" style ="width:100px;" type="number" min ="0"></td>
+                             
+
+                        </tr> 
+                        }
+                       
+                       
+                    </tbody>
+                </table>
+                </div> <!-- table-responsive end // -->
+              
+               <br />
+       
+<!-- Kết thúc -->
+
+            </div> <!-- card-body end// -->
+        </div> <!-- card end// -->
+
+
+    </section> <!-- content-main end// -->
+
+
+    <!-- Modal -->
+<div class="modal fade" id="Modle-noty-create" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="Modle-noty-createTitle">Modal title</h5>
+        <button type="button" class="close dismiss-model" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id = "content-noty">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id = "btn-Close">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <script>
+
+         document.querySelector('.dismiss-model').addEventListener('click', function(e) {
+               $('#Modle-noty-create').modal('hide');
+
+         });
+
+      document.querySelectorAll('.form-check-input').forEach(function(item){
+          item.addEventListener('click', function(){
+             //set disabled item to false
+            if( this.checked ){
+                item.closest('tr').querySelector('.quantity').disabled = false;
+                item.closest('tr').querySelector('.quantity').value = 1;
+                }else{
+                item.closest('tr').querySelector('.quantity').disabled = true;
+                item.closest('tr').querySelector('.quantity').value = 0;
+
+                }
+          });
+      });   
+      var check = false;
+
+      document.querySelector('#btn-Close').addEventListener('click', function(e) {
+         if(check){
+                window.location.href = "/Order"
+
+         }else{
+            $('#Modle-noty-create').modal('hide');
+
+         }
+
+    });
+
+      var arr = [];
+      var idCustomer = '@idCustomer';
+      document.querySelector("#btn-save").addEventListener("click", function(){
+          arr = [];
+        document.querySelectorAll(".form-check-input").forEach(function(item){
+           if(item.checked){
+            var idProduct = item.getAttribute("idProduct");
+            var description = item.getAttribute("description");
+            var price = item.getAttribute("price");
+              var quantity = item.closest('tr').querySelector('.quantity').value;
+
+              if(quantity!= null && quantity > 0){
+                    arr.push({
+                    Id: idProduct,
+                    Quantity: quantity,
+                    Description:description,
+                    Price:price
+
+                });
+              }
+               
+
+
+            }
+        });
+
+        $('#Modle-noty-createTitle').text('Save Order')
+
+
+        if(arr.length == 0){
+             $('#content-noty').html('Please select product')
+              $('#Modle-noty-create').modal('show');
+            return;
+        }
+       
+         $.ajax({
+        url: '/Order/saveOrder',
+        type: 'POST',
+        data : {
+            arr: arr,
+            idCustomer: idCustomer
+        },
+        success: function(data){
+           if(data){
+              $('#content-noty').html('Save Order success')
+              $('#Modle-noty-create').modal('show');
+              check = true;
+          }else{
+               $('#content-noty').html('Save Order fail')
+
+              $('#Modle-noty-create').modal('show')
+          }
+           
+        }
+    });
+
+    });
+
+
+
+    </script>
+
